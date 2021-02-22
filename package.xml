@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>beast_localization</name>
+  <version>0.0.1</version>
+  <description>AMCL, map server and odometry for BEAST.</description>
+  <author email="enrico.piazza@polimi.it">Enrico Piazza</author>
+  <maintainer email="enrico.piazza@polimi.it">Enrico Piazza</maintainer>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  
+  <depend>beast_scan_filter</depend>
+  <depend>beast_odometry_publisher</depend>
+  <depend>map_server</depend>
+  <depend>amcl</depend>
+
+  <export>
+  </export>
+</package>

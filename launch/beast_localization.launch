@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+
+    <arg name="test_from_bag" default="false" />
+    <arg name="bag_path"
+         default="$(env HOME)/eurobench_output/subject_001_cond_007_run_001_20210210_181033/subject_001_cond_007_run_001_20210210_181033.bag" />
+
+    <group if="$(arg test_from_bag)" >
+        <param name="use_sim_time" value="true" />
+        <param name="/amcl/initial_pose_x" value="0.0" />
+        <param name="/amcl/initial_pose_y" value="0.0" />
+        <param name="/amcl/initial_pose_a" value="0.0" />
+        <param name="/amcl/initial_cov_xx" value="0.1" />
+        <param name="/amcl/initial_cov_yy" value="0.1" />
+        <param name="/amcl/initial_cov_aa" value="0.068" />
+        <node name="rosbag_player" pkg="rosbag" type="play" args="$(arg bag_path) --clock /tf:=/rosbag_replay/tf" required="true" />
+        <node name="rosbag_recorder" pkg="rosbag" type="record" args="-o $(env HOME)/tmp/out.bag -a"/>
+        <node name="rviz" pkg="rviz" type="rviz" args="-d $(env HOME)/.rviz/beast.rviz" respawn="true" />
+    </group>
+
+    <arg name="arena_layout" default="3_cylinders" />
+
+    <include file="$(find beast_scan_filter)/launch/beast_scan_filter.launch" />
+    <include file="$(find beast_odometry_publisher)/launch/beast_odometry_publisher.launch" />
+    <node name="map_server" pkg="map_server" type="map_server" args="$(find beast_localization)/maps/map_$(arg arena_layout).yaml" respawn="true" />
+    <rosparam file="$(find beast_localization)/maps/checkpoints_$(arg arena_layout).yaml" command="load" subst_value="true" />
+
+    <node pkg="amcl" type="amcl" name="amcl" respawn="true" output="screen">
+        <param name="odom_frame_id" value="odom"/>
+        <param name="update_min_d" value="0.1"/>
+        <param name="update_min_a" value="0.25"/>
+        
+        <param name="gui_publish_rate" value="10.0"/>
+        <param name="transform_tolerance" value="0.2" />
+
+        <param name="laser_max_beams" value="30"/>
+        <param name="min_particles" value="5000"/>
+        <param name="max_particles" value="15000"/>
+        <param name="resample_interval" value="2"/>
+        <param name="kld_err" value="0.05"/>
+        <param name="kld_z" value="0.99"/>
+
+        <param name="odom_model_type" value="diff"/>
+        <param name="odom_alpha1" value="1.0"/>
+        <param name="odom_alpha2" value="1.0"/>
+        <param name="odom_alpha3" value="1.0"/>
+        <param name="odom_alpha4" value="1.0"/>
+
+        <param name="laser_model_type" value="likelihood_field"/>
+        <param name="laser_likelihood_max_dist" value="2.0"/>
+        <param name="laser_z_hit" value="0.5"/>
+        <param name="laser_z_short" value="0.05"/>
+        <param name="laser_z_max" value="0.05"/>
+        <param name="laser_z_rand" value="0.5"/>
+        <param name="laser_sigma_hit" value="0.2"/>
+        <param name="laser_lambda_short" value="0.1"/>
+
+        <param name="recovery_alpha_slow" value="0.0"/>
+        <param name="recovery_alpha_fast" value="0.0"/>
+
+        <remap from="/scan" to="/beast_cart/scan_filtered"/> 
+    </node>
+
+
+</launch>
