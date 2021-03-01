@@ -19,7 +19,7 @@
         <node name="rviz" pkg="rviz" type="rviz" args="-d $(env HOME)/.rviz/beast.rviz" respawn="true" />
     </group>
 
-    <arg name="arena_layout" default="3_cylinders" />
+    <arg name="arena_layout" default="2_cylinders" />
 
     <include file="$(find beast_scan_filter)/launch/beast_scan_filter.launch" />
     <include file="$(find beast_odometry_publisher)/launch/beast_odometry_publisher.launch" />
