@@ -35,8 +35,8 @@
         <param name="transform_tolerance" value="0.2" />
 
         <param name="laser_max_beams" value="30"/>
-        <param name="min_particles" value="5000"/>
-        <param name="max_particles" value="15000"/>
+        <param name="min_particles" value="1000"/>
+        <param name="max_particles" value="5000"/>
         <param name="resample_interval" value="2"/>
         <param name="kld_err" value="0.05"/>
         <param name="kld_z" value="0.99"/>
