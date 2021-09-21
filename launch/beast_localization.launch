@@ -2,6 +2,7 @@
 
 <launch>
 
+    <arg name="platform" default="walker" />
     <arg name="test_from_bag" default="false" />
     <arg name="bag_path"
          default="$(env HOME)/eurobench_output/subject_001_cond_007_run_001_20210210_181033/subject_001_cond_007_run_001_20210210_181033.bag" />
@@ -21,8 +22,12 @@
 
     <arg name="arena_layout" default="2_cylinders" />
 
-    <include file="$(find beast_scan_filter)/launch/beast_scan_filter.launch" />
-    <include file="$(find beast_odometry_publisher)/launch/beast_odometry_publisher.launch" />
+    <include file="$(find beast_scan_filter)/launch/beast_scan_filter.launch" >
+        <arg name="platform" value="$(arg platform)"/>
+    </include>
+    <include file="$(find beast_odometry_publisher)/launch/beast_odometry_publisher.launch" >
+        <arg name="platform" value="$(arg platform)"/>
+    </include>
     <node name="map_server" pkg="map_server" type="map_server" args="$(find beast_localization)/maps/map_$(arg arena_layout).yaml" respawn="true" />
     <rosparam file="$(find beast_localization)/maps/checkpoints_$(arg arena_layout).yaml" command="load" subst_value="true" />
 
