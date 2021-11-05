@@ -2,7 +2,7 @@
 
 <launch>
 
-    <arg name="platform" default="walker" />
+    <arg name="platform" />
     <arg name="test_from_bag" default="false" />
     <arg name="bag_path"
          default="$(env HOME)/eurobench_output/subject_001_cond_007_run_001_20210210_181033/subject_001_cond_007_run_001_20210210_181033.bag" />
